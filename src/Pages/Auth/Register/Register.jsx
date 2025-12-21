@@ -13,13 +13,17 @@ const Register = () => {
 
     const { registerUser , updateUserProfile} = useAuth()
 
+    
+
     const handleRegistration = (data) => {
-        console.log('after register', data.photo[0]);
+       // console.log('after register', data.photo[0]);
         const profileImg= data.photo[0];
 
         registerUser(data.email, data.password).
             then(result => {
-                console.log(result.user)
+
+
+               // console.log(result.user)
                 //store image and get the photo url 
                 const formData =new FormData();
                 formData.append('image',profileImg);
@@ -27,11 +31,25 @@ const Register = () => {
 
                 axios.post(image_API_URL, formData)
                 .then(res => {
-                    console.log('after image upload', res.data.data.url)
+                    const photoURL=res.data.data.url
+
+                    //create user in the database
+                     const userInfo={
+                        email: data.email,
+                        displayName: data.name,
+                        photoURL : photoURL
+                     }
+                     axios.post('http://localhost:5000/users', userInfo)
+                     .then(res =>{
+                        console.log(res.data)
+                     })
+                     .catch(error =>{
+                        console.log(error)
+                     })
 
                     const userProfile = {
                         displayName : data.name,
-                        photoURL : res.data.data.url
+                        photoURL : photoURL
                     }
                     updateUserProfile(userProfile)
                     .then( () =>{

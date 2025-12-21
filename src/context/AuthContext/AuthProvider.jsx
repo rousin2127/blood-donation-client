@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase/firebase.init';
+import axios from 'axios';
 
 
 
@@ -12,6 +13,7 @@ const AuthProvider = ({children}) => {
 
     const[user, setUser]=  useState(null)
     const[loading, setLoading] = useState(true)
+    const [role, setRole]= useState('')
 
     const registerUser= (email, password)=>{
         setLoading(true)
@@ -42,9 +44,29 @@ const AuthProvider = ({children}) => {
     }
 
 
-    useEffect( ()=> {
 
+    useEffect( ()=> {
+        const unSubscribe = onAuthStateChanged(auth, (currentUser)=>{
+             setUser(currentUser);
+             setLoading(false);
+        })
+        return ()=>{
+            unSubscribe();
+        }
     }, [])
+
+
+       useEffect(() => {
+        if(!user) return;
+        axios.get(`http://localhost:5000/users/role/${user.email}`)
+        .then(res => {
+            console.log( res.data.role)
+            setLoading(false)
+        })
+    }, [user])
+
+   // console.log(role);
+    
 
     const authInfo= {
         user,
@@ -56,9 +78,9 @@ const AuthProvider = ({children}) => {
         updateUserProfile
     }
     return (
-        <AuthContext value={authInfo}>
+        <AuthContext.Provider value={authInfo}>
             {children}
-        </AuthContext>
+        </AuthContext.Provider>
     );
 };
 

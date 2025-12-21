@@ -1,16 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import useAuth from '../../hook/useAuth';
 
 const Navbar = () => {
 
+    const { user, logOut } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                navigate('/login',{ replace: true }); // explicit redirect
+            })
+            .catch(error => console.log(error));
+    };
+
     const links = <>
-    
+
         <li><a>Item 1</a></li>
         <li><a>Item 1</a></li>
         <li><a>Item 1</a></li>
     </>
-        
-    
+
+
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -31,16 +43,21 @@ const Navbar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    
-                  {
-                    links
-                  }
-                    
+
+                    {
+                        links
+                    }
+
                 </ul>
             </div>
             <div className="navbar-end">
-                <Link to={'/login'} className="btn">Login</Link>
-                <Link to={'/register'} className="btn">Register</Link>
+                {
+                    user ?
+                        <a onClick={handleLogOut} className='btn'>Log Out</a>
+                        : <Link to={'/login'} className="btn">Login</Link>
+                }
+
+
             </div>
         </div>
     );
