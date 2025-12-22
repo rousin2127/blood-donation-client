@@ -13,7 +13,9 @@ const AuthProvider = ({children}) => {
 
     const[user, setUser]=  useState(null)
     const[loading, setLoading] = useState(true)
+    const[roleLoading, setRoleLoading] = useState(true)
     const [role, setRole]= useState('')
+    const [userStatus, setUserStatus]=  useState('')
 
     const registerUser= (email, password)=>{
         setLoading(true)
@@ -61,6 +63,8 @@ const AuthProvider = ({children}) => {
         axios.get(`http://localhost:5000/users/role/${user.email}`)
         .then(res => {
             setRole( res.data.role)
+            setUserStatus(res.data.status)
+            setRoleLoading(false)
             //setLoading(false)
         })
     }, [user])
@@ -76,7 +80,9 @@ const AuthProvider = ({children}) => {
         signInGoogle,
         logOut,
         updateUserProfile,
-        role
+        role,
+        roleLoading,
+        userStatus
     }
     return (
         <AuthContext.Provider value={authInfo}>

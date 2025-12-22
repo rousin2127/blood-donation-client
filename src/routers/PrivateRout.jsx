@@ -3,18 +3,18 @@ import useAuth from '../hook/useAuth';
 import { Navigate, useLocation } from 'react-router';
 
 const PrivateRout = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, roleLoading, userStatus } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || roleLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <span className="loading loading-infinity loading-xl"></span>
       </div>
     );
   }
-
-  if (!user) {
+ 
+  if (!user || !userStatus == 'active') {
     return (
       <Navigate
         to="/login"
