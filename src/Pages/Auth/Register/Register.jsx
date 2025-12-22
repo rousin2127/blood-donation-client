@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hook/useAuth';
 import { Link } from 'react-router';
 import axios from 'axios'
+import { useState } from 'react';
 
 
 const Register = () => {
@@ -11,52 +12,75 @@ const Register = () => {
         watch,
         formState: { errors }, } = useForm();
 
-    const { registerUser , updateUserProfile} = useAuth()
+    const { registerUser, updateUserProfile } = useAuth()
 
-    
+    const [upazilas, setUpazilas] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [district, setDistrict] = useState('')
+    const [upazila, setUpazila] = useState('')
+
+
+    useEffect(() => {
+        axios.get('./upazila.json')
+            .then(res => {
+                setUpazilas(res.data.upazilas)
+            })
+
+        axios.get('./district.json')
+            .then(res => {
+                setDistricts(res.data.districts)
+            })
+    }, [])
+
+    console.log(upazila)
+
+
 
     const handleRegistration = (data) => {
-       // console.log('after register', data.photo[0]);
-        const profileImg= data.photo[0];
+        // console.log('after register', data.photo[0]);
+        const profileImg = data.photo[0];
 
         registerUser(data.email, data.password).
             then(result => {
 
 
-               // console.log(result.user)
+                // console.log(result.user)
                 //store image and get the photo url 
-                const formData =new FormData();
-                formData.append('image',profileImg);
-                const image_API_URL =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_url}`
+                const formData = new FormData();
+                formData.append('image', profileImg);
+                const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_url}`
 
                 axios.post(image_API_URL, formData)
-                .then(res => {
-                    const photoURL=res.data.data.url
+                    .then(res => {
+                        const photoURL = res.data.data.url
 
-                    //create user in the database
-                     const userInfo={
-                        email: data.email,
-                        displayName: data.name,
-                        photoURL : photoURL
-                     }
-                     axios.post('http://localhost:5000/users', userInfo)
-                     .then(res =>{
-                        console.log(res.data)
-                     })
-                     .catch(error =>{
-                        console.log(error)
-                     })
+                        //create user in the database
+                        const userInfo = {
+                            email: data.email,
+                            displayName: data.name,
+                            photoURL: photoURL,
+                            blood: data.blood,
+                            district: data.district,
+                            upazila: data.upazila,
+                        }
+                        axios.post('http://localhost:5000/users', userInfo)
+                            .then(res => {
+                                console.log(res.data)
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
 
-                    const userProfile = {
-                        displayName : data.name,
-                        photoURL : photoURL
-                    }
-                    updateUserProfile(userProfile)
-                    .then( () =>{
-                        console.log('user profile updated ')
+                        const userProfile = {
+                            displayName: data.name,
+                            photoURL: photoURL
+                        }
+                        updateUserProfile(userProfile)
+                            .then(() => {
+                                console.log('user profile updated ')
+                            })
+                            .catch(error => console.log(error))
                     })
-                    .catch(error => console.log(error))
-                })
 
                 //update user profile here 
             })
@@ -74,7 +98,7 @@ const Register = () => {
                 <fieldset className="fieldset">
 
                     <label className="label">Name</label>
-                    <input type="text" {...register('name', { required: true })} className="input" placeholder="Your Name" />                    
+                    <input type="text" {...register('name', { required: true })} className="input" placeholder="Your Name" />
                     {/* email */}
                     <label className="label">Email</label>
                     <input type="email" {...register('email', { required: true })} className="input" placeholder="Email" />
@@ -82,6 +106,35 @@ const Register = () => {
                     {/* Photo*/}
                     <label className="label">Photo</label>
                     <input type="file" {...register('photo', { required: true })} className="input" placeholder="PhotoUrl" />
+
+                    {/* Blood Group */}
+                    <select {...register('blood', { required: true })} className="select">
+                        <option value="">Choose Blood Group</option>
+                        {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(b => (
+                            <option key={b} value={b}>{b}</option>
+                        ))}
+                    </select>
+
+                    {/* Upazila */}
+                    <select {...register('upazila', { required: true })} className="select">
+                        <option value="">Select Your Upazila</option>
+                        {upazilas.map(u => (
+                            <option key={u.id} value={u.name}>
+                                {u.name}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/* District */}
+                    <select {...register('district', { required: true })} className="select">
+                        <option value="">Select Your District</option>
+                        {districts.map(d => (
+                            <option key={d.id} value={d.name}>
+                                {d.name}
+                            </option>
+                        ))}
+                    </select>
+
                     {/* passward */}
                     <label className="label">Password</label>
                     <input type="password" {...register('password', { required: true, minLength: 6, pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/ })} className="input" placeholder="Password" />

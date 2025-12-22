@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import useAuth from '../../hook/useAuth';
 
 const Navbar = () => {
@@ -51,6 +51,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
+                <NavLink to={'/dashboard'} className='btn'>Dashboard</NavLink>
                 {
                     user ?
                         <a onClick={handleLogOut} className='btn'>Log Out</a>

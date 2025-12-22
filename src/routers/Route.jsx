@@ -3,12 +3,16 @@ import RootLayout from "../layouts/RootLayout";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import DashBoardLayout from "../DashboardLayout/DashBoardLayout";
+import MainDashboard from "../Pages/Dashboard/MainDashBoard/MainDashboard";
+import AddRequest from "../Pages/Dashboard/AddRequest/AddRequest";
+import ManageRequest from "../Pages/Dashboard/ManageRequest/ManageRequest";
 
 export const router = createBrowserRouter([{
 
-    path:'/',
+    path: '/',
     Component: RootLayout,
-    children:[
+    children: [
         {
             index: true,
             Component: Home
@@ -22,4 +26,23 @@ export const router = createBrowserRouter([{
             Component: Register
         }
     ]
-}])
+},
+{
+    path:'dashboard',
+    element: <DashBoardLayout></DashBoardLayout>,
+    children: [
+        {
+            path: '/dashboard',
+            element:<MainDashboard></MainDashboard>
+        },
+        {
+            path: '/dashboard/add-request',
+            element: <AddRequest></AddRequest>
+        },
+        {
+            path: '/dashboard/manage-request',
+            element: <ManageRequest></ManageRequest>
+        }
+    ]
+}
+])

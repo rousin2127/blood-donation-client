@@ -60,8 +60,8 @@ const AuthProvider = ({children}) => {
         if(!user) return;
         axios.get(`http://localhost:5000/users/role/${user.email}`)
         .then(res => {
-            console.log( res.data.role)
-            setLoading(false)
+            setRole( res.data.role)
+            //setLoading(false)
         })
     }, [user])
 
@@ -75,7 +75,8 @@ const AuthProvider = ({children}) => {
         signInUser,
         signInGoogle,
         logOut,
-        updateUserProfile
+        updateUserProfile,
+        role
     }
     return (
         <AuthContext.Provider value={authInfo}>
