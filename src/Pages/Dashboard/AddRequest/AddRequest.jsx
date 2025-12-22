@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hook/useAuth";
 import axios from "axios";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const AddRequest = () => {
   const { user } = useAuth();
@@ -9,6 +10,8 @@ const AddRequest = () => {
 
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
+
+  const axiosSecure= useAxiosSecure()
 
   useEffect(() => {
     axios.get("/district.json").then(res => {
@@ -30,7 +33,7 @@ const AddRequest = () => {
 
     console.log("Donation Request:", requestData);
 
-     axios.post("http://localhost:5000/requests", requestData)
+     axiosSecure.post("/requests", requestData)
      .then(res =>{
         alert(res.data.insertedId)
      }).catch(error => {

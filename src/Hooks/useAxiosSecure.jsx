@@ -12,13 +12,14 @@ const axiosSecure = axios.create({
 const useAxiosSecure = ()=>{
 
     const {user}= useAuth()
-    useEffect(()=>{
-        const reqInterceptor = axiosSecure.interceptors.request.use(config=>{
+    
+    useEffect(() => {
+        const reqInterceptor = axiosSecure.interceptors.request.use( config =>{
             config.headers.Authorization = `Bearer ${user?.accessToken}`
             return config
         })
 
-        const reqInterceptor = axiosSecure.interceptors.response.use((response)=>{
+        const resInterceptor = axiosSecure.interceptors.response.use((response)=>{
             return response 
         },(error)=>{
             console.log(error);
@@ -27,8 +28,12 @@ const useAxiosSecure = ()=>{
 
         return ()=>{
              axiosSecure.interceptors.request.eject(reqInterceptor);
-             axiosSecure.interceptors.response.eject(reqInterceptor)
+             axiosSecure.interceptors.response.eject(resInterceptor)
         }
 
     },[user])
+
+    return axiosSecure
 }
+
+export default useAxiosSecure
