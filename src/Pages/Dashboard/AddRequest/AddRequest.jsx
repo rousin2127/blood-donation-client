@@ -1,11 +1,182 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import useAuth from "../../../hook/useAuth";
+import axios from "axios";
 
 const AddRequest = () => {
-    return (
-        <div>
-            Add Request
+  const { user } = useAuth();
+  const { register, handleSubmit } = useForm();
+
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
+
+  useEffect(() => {
+    axios.get("/district.json").then(res => {
+      setDistricts(res.data.districts);
+    });
+
+    axios.get("/upazila.json").then(res => {
+      setUpazilas(res.data.upazilas);
+    });
+  }, []);
+
+  const onSubmit = (data) => {
+    const requestData = {
+      ...data,
+      requesterName: user?.displayName,
+      requesterEmail: user?.email,
+      status: "pending",
+    };
+
+    console.log("Donation Request:", requestData);
+
+     axios.post("http://localhost:5000/requests", requestData)
+     .then(res =>{
+        alert(res.data.insertedId)
+     }).catch(error => {
+        console.log(error)
+     })
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto bg-white rounded-xl shadow p-6">
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+        Create Donation Request
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+
+        {/* Requester Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="label">Requester Name</label>
+            <input
+              type="text"
+              value={user?.displayName || ""}
+              readOnly
+              className="input bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <label className="label">Requester Email</label>
+            <input
+              type="email"
+              value={user?.email || ""}
+              readOnly
+              className="input bg-gray-100 cursor-not-allowed"
+            />
+          </div>
         </div>
-    );
+
+        {/* Recipient Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="label">Recipient Name</label>
+            <input
+              {...register("recipientName", { required: true })}
+              className="input"
+              placeholder="Recipient Name"
+            />
+          </div>
+
+          <div>
+            <label className="label">Hospital Name</label>
+            <input
+              {...register("hospitalName", { required: true })}
+              className="input"
+              placeholder="Hospital Name"
+            />
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="label">Recipient District</label>
+            <select {...register("district", { required: true })} className="select">
+              <option value="">Select District</option>
+              {districts.map(d => (
+                <option key={d.id} value={d.name}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="label">Recipient Upazila</label>
+            <select {...register("upazila", { required: true })} className="select">
+              <option value="">Select Upazila</option>
+              {upazilas.map(u => (
+                <option key={u.id} value={u.name}>
+                  {u.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="label">Full Address</label>
+          <input
+            {...register("address", { required: true })}
+            className="input"
+            placeholder="Zahir Raihan Rd, Dhaka"
+          />
+        </div>
+
+        {/* Blood + Date + Time */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="label">Blood Group</label>
+            <select {...register("bloodGroup", { required: true })} className="select">
+              <option value="">Select Blood Group</option>
+              {["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(b => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="label">Donation Date</label>
+            <input
+              type="date"
+              {...register("donationDate", { required: true })}
+              className="input"
+            />
+          </div>
+
+          <div>
+            <label className="label">Donation Time</label>
+            <input
+              type="time"
+              {...register("donationTime", { required: true })}
+              className="input"
+            />
+          </div>
+        </div>
+
+        {/* Message */}
+        <div>
+          <label className="label">Request Message</label>
+          <textarea
+            {...register("message", { required: true })}
+            className="textarea h-28"
+            placeholder="Explain why blood is needed..."
+          />
+        </div>
+
+        {/* Submit */}
+        <div className="text-right">
+          <button className="btn btn-primary px-8">
+            Request
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default AddRequest;
