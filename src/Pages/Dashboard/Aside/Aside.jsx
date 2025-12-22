@@ -32,7 +32,7 @@ const Aside = () => {
         <MenuItem to="/dashboard" icon={<Home size={20} />} label="Dashboard" />
 
         {
-          role == 'dooner' && (
+          role == 'donor' && (
             <MenuItem
               to="/dashboard/add-request"
               icon={<PlusCircle size={20} />}
@@ -53,9 +53,9 @@ const Aside = () => {
         }
 
         <MenuItem
-          to="/dashboard/manage-request"
+          to="/dashboard/my-donation-requests"
           icon={<ClipboardList size={20} />}
-          label="Manage Request"
+          label="My Donation Request"
         />
         <MenuItem to="/" icon={<Home size={20} />} label="Home" />
       </nav>

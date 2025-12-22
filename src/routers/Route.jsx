@@ -6,9 +6,9 @@ import Register from "../Pages/Auth/Register/Register";
 import DashBoardLayout from "../DashboardLayout/DashBoardLayout";
 import MainDashboard from "../Pages/Dashboard/MainDashBoard/MainDashboard";
 import AddRequest from "../Pages/Dashboard/AddRequest/AddRequest";
-import ManageRequest from "../Pages/Dashboard/ManageRequest/ManageRequest";
 import AllUsers from "../Pages/Dashboard/Allsers/AllUsers";
 import PrivateRout from "./PrivateRout";
+import MyDonationRequest from "../Pages/Dashboard/DonationRequest/MyDonationRequest";
 
 export const router = createBrowserRouter([{
 
@@ -46,8 +46,8 @@ export const router = createBrowserRouter([{
             element: <AllUsers></AllUsers>
         },
         {
-            path: '/dashboard/manage-request',
-            element: <ManageRequest></ManageRequest>
+            path: '/dashboard/my-donation-requests',
+            element: <MyDonationRequest></MyDonationRequest>
         }
     ]
 }
