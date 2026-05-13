@@ -120,7 +120,7 @@ const Home = () => {
                     <div className="space-y-3">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Contact Us</h2>
                         <p className="text-gray-600">
-                            Need help or want to share feedback? Send a message and we’ll get back to you.
+                            Need help or want to share feedback? Send a message and we'll get back to you.
                         </p>
                         <div className="mt-4">
                             <p className="text-sm text-gray-500">Phone</p>
