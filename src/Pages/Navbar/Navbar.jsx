@@ -15,12 +15,21 @@ const Navbar = () => {
             .catch(error => console.log(error));
     };
 
-    const links = <>
-
-        <li><a>Item 1</a></li>
-        <li><a>Item 1</a></li>
-        <li><a>Item 1</a></li>
-    </>
+    const links = (
+        <>
+            <li>
+                <NavLink to="/donation-requests">Donation Requests</NavLink>
+            </li>
+            <li>
+                <NavLink to="/search">Search Donors</NavLink>
+            </li>
+            {user && (
+                <li>
+                    <NavLink to="/funding">Funding</NavLink>
+                </li>
+            )}
+        </>
+    );
 
 
 
@@ -50,15 +59,39 @@ const Navbar = () => {
 
                 </ul>
             </div>
-            <div className="navbar-end">
-                <NavLink to={'/dashboard'} className='btn'>Dashboard</NavLink>
-                {
-                    user ?
-                        <a onClick={handleLogOut} className='btn'>Log Out</a>
-                        : <Link to={'/login'} className="btn">Login</Link>
-                }
-
-
+            <div className="navbar-end gap-2">
+                {!user ? (
+                    <Link to="/login" className="btn btn-error text-white">
+                        Login
+                    </Link>
+                ) : (
+                    <div className="dropdown dropdown-end">
+                        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                            <div className="w-10 rounded-full">
+                                <img
+                                    alt="User"
+                                    src={user?.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                                />
+                            </div>
+                        </div>
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+                        >
+                            <li className="px-2 py-1 text-sm text-gray-600">
+                                {user?.displayName || "User"}
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard">Dashboard</NavLink>
+                            </li>
+                            <li>
+                                <button type="button" onClick={handleLogOut}>
+                                    Logout
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                )}
             </div>
         </div>
     );

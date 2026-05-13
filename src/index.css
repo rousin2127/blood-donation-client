@@ -1,2 +1,40 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Blood Donation theme: warm paper + deep crimson + trust blue accent */
+:root:has(input.theme-controller[value=bloodcare]:checked),
+[data-theme="bloodcare"] {
+  color-scheme: light;
+  --color-base-100: oklch(99% 0.006 15);
+  --color-base-200: oklch(96% 0.014 18);
+  --color-base-300: oklch(91% 0.028 20);
+  --color-base-content: oklch(27% 0.035 18);
+  --color-primary: oklch(50% 0.21 22);
+  --color-primary-content: oklch(99% 0.01 15);
+  --color-secondary: oklch(42% 0.12 18);
+  --color-secondary-content: oklch(98% 0.01 15);
+  --color-accent: oklch(52% 0.12 245);
+  --color-accent-content: oklch(99% 0.01 245);
+  --color-neutral: oklch(32% 0.04 18);
+  --color-neutral-content: oklch(96% 0.01 15);
+  --color-info: oklch(62% 0.14 240);
+  --color-info-content: oklch(99% 0.01 240);
+  --color-success: oklch(58% 0.16 155);
+  --color-success-content: oklch(99% 0.02 155);
+  --color-warning: oklch(78% 0.15 75);
+  --color-warning-content: oklch(28% 0.06 45);
+  --color-error: oklch(55% 0.22 25);
+  --color-error-content: oklch(99% 0.01 15);
+  --radius-selector: 0.75rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+body {
+  @apply bg-base-200 text-base-content antialiased;
+}

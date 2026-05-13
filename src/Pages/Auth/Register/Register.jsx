@@ -1,46 +1,58 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hook/useAuth';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import axios from 'axios'
-import { useState } from 'react';
 
 
 const Register = () => {
 
-    const { register, handleSubmit,
-        watch,
-        formState: { errors }, } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const { registerUser, updateUserProfile } = useAuth()
 
-    const [upazilas, setUpazilas] = useState([]);
+    const [allUpazilas, setAllUpazilas] = useState([]);
     const [districts, setDistricts] = useState([]);
-    const [district, setDistrict] = useState('')
-    const [upazila, setUpazila] = useState('')
+    const [districtId, setDistrictId] = useState('');
+    const navigate = useNavigate()
 
+    const upazilaOptions = useMemo(() => {
+        if (!districtId) return [];
+        return allUpazilas.filter(
+            (u) => String(u.district_id) === String(districtId)
+        );
+    }, [allUpazilas, districtId]);
 
     useEffect(() => {
-        axios.get('./upazila.json')
+        axios.get('/upazila.json')
             .then(res => {
-                setUpazilas(res.data.upazilas)
+                setAllUpazilas(res.data.upazilas || [])
             })
 
-        axios.get('./district.json')
+        axios.get('/district.json')
             .then(res => {
-                setDistricts(res.data.districts)
+                setDistricts(res.data.districts || [])
             })
     }, [])
-
-    console.log(upazila)
 
 
 
     const handleRegistration = (data) => {
+        const email = (data?.email || '').trim();
+        if (!email) {
+            alert('Please enter a valid email.');
+            return;
+        }
+
+        if (data?.password !== data?.confirm_password) {
+            alert('Password and Confirm Password must match.');
+            return;
+        }
+
         // console.log('after register', data.photo[0]);
         const profileImg = data.photo[0];
 
-        registerUser(data.email, data.password).
+        registerUser(email, data.password).
             then(result => {
 
 
@@ -56,19 +68,19 @@ const Register = () => {
 
                         //create user in the database
                         const userInfo = {
-                            email: data.email,
+                            email,
                             displayName: data.name,
                             photoURL: photoURL,
                             blood: data.blood,
                             district: data.district,
                             upazila: data.upazila,
                         }
-                        axios.post('http://localhost:5000/users', userInfo)
+                        axios.post('https://blood-donation-server-livid.vercel.app/users', userInfo)
                             .then(res => {
                                 console.log(res.data)
                             })
                             .catch(error => {
-                                console.log(error)
+                                alert('please try again')
                             })
 
                         const userProfile = {
@@ -78,78 +90,121 @@ const Register = () => {
                         updateUserProfile(userProfile)
                             .then(() => {
                                 console.log('user profile updated ')
+                                alert("Register successfully! please Login")
+                                navigate('/login');
                             })
-                            .catch(error => console.log(error))
+                            .catch(error => {
+                                alert('please try again')
+                            })
                     })
 
                 //update user profile here 
             })
             .catch(error => {
-
-                console.log(error)
-
+                if (error.code === 'auth/email-already-in-use') {
+                    alert('This email already exists. Please login.');
+                } else if (error.code === 'auth/invalid-email') {
+                    alert('Invalid email. Please check and try again.');
+                } else {
+                    alert(error.message);
+                }
             })
+
     }
     return (
-        <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-            <h3 className='text-3xl text-center'>Welcome To Blood Donation</h3>
-            <p className='text-center'>Please Register</p>
-            <form className='card-body' onSubmit={handleSubmit(handleRegistration)}>
-                <fieldset className="fieldset">
+            <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
+                <h3 className='text-3xl text-center'>Welcome To Blood Donation</h3>
+                <p className='text-center'>Please Register</p>
+                <form className='card-body' onSubmit={handleSubmit(handleRegistration)}>
+                    <fieldset className="fieldset">
+                        {/* email */}
+                        <label className="label">Email</label>
+                        <input
+                            type="email"
+                            {...register('email', { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })}
+                            className="input"
+                            placeholder="Email"
+                        />
+                        {errors.email && <span className='text-red-500'>Valid email is required</span>}
+                        {/* name */}
+                        <label className="label">Name</label>
+                        <input type="text" {...register('name', { required: true })} className="input" placeholder="Your Name" />
 
-                    <label className="label">Name</label>
-                    <input type="text" {...register('name', { required: true })} className="input" placeholder="Your Name" />
-                    {/* email */}
-                    <label className="label">Email</label>
-                    <input type="email" {...register('email', { required: true })} className="input" placeholder="Email" />
-                    {errors.email && <span>This field is required</span>}
-                    {/* Photo*/}
-                    <label className="label">Photo</label>
-                    <input type="file" {...register('photo', { required: true })} className="input" placeholder="PhotoUrl" />
+                        {/* Photo*/}
+                        <label className="label">Photo</label>
+                        <input type="file" {...register('photo', { required: true })} className="input" placeholder="PhotoUrl" />
 
-                    {/* Blood Group */}
-                    <select {...register('blood', { required: true })} className="select">
-                        <option value="">Choose Blood Group</option>
-                        {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(b => (
-                            <option key={b} value={b}>{b}</option>
-                        ))}
-                    </select>
+                        {/* Blood Group */}
+                        <label className="label">Blood Group</label>
+                        <select {...register('blood', { required: true })} className="select">
+                            <option value="">Choose Blood Group</option>
+                            {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(b => (
+                                <option key={b} value={b}>{b}</option>
+                            ))}
+                        </select>
 
-                    {/* Upazila */}
-                    <select {...register('upazila', { required: true })} className="select">
-                        <option value="">Select Your Upazila</option>
-                        {upazilas.map(u => (
-                            <option key={u.id} value={u.name}>
-                                {u.name}
+                        {/* District first — then upazila filtered by district_id */}
+                        <label className="label">District</label>
+                        <select
+                            {...register('district', {
+                                required: true,
+                                onChange: (e) => {
+                                    const name = e.target.value;
+                                    const d = districts.find((x) => x.name === name);
+                                    setDistrictId(d?.id ? String(d.id) : '');
+                                    setValue('upazila', '');
+                                },
+                            })}
+                            className="select"
+                        >
+                            <option value="">Select Your District</option>
+                            {districts.map(d => (
+                                <option key={d.id} value={d.name}>
+                                    {d.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <label className="label">Upazila</label>
+                        <select
+                            {...register('upazila', { required: true })}
+                            className="select"
+                            disabled={!districtId}
+                        >
+                            <option value="">
+                                {districtId ? 'Select Your Upazila' : 'Select district first'}
                             </option>
-                        ))}
-                    </select>
+                            {upazilaOptions.map(u => (
+                                <option key={u.id} value={u.name}>
+                                    {u.name}
+                                </option>
+                            ))}
+                        </select>
 
-                    {/* District */}
-                    <select {...register('district', { required: true })} className="select">
-                        <option value="">Select Your District</option>
-                        {districts.map(d => (
-                            <option key={d.id} value={d.name}>
-                                {d.name}
-                            </option>
-                        ))}
-                    </select>
+                        {/* password */}
+                        <label className="label">Password</label>
+                        <input type="password" {...register('password', { required: true, minLength: 6, pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/ })} className="input" placeholder="Password" />
+                        {errors.password?.type === 'required' && <span className='text-red-500'>This field is required</span>}
+                        {errors.password?.type === 'minLength' && <span className='text-red-500'>Password must be at least 6 characters</span>}
+                        {errors.password?.type === 'pattern' && <span className='text-red-500'>Password must include upper, lower, number and special character</span>}
 
-                    {/* passward */}
-                    <label className="label">Password</label>
-                    <input type="password" {...register('password', { required: true, minLength: 6, pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/ })} className="input" placeholder="Password" />
-                    {errors.password?.type === 'required' && <span className='text-red-500'>This field is required</span>}
-                    {errors.password?.type === 'minLength' && <span className='text-red-500'>Password must be at Least 6 charecter</span>}
-                    {errors.password?.type === 'pattern' && <span className='text-red-500'>Password must be at Least pattern</span>}
+                        <label className="label">Confirm Password</label>
+                        <input
+                            type="password"
+                            {...register('confirm_password', { required: true })}
+                            className="input"
+                            placeholder="Confirm Password"
+                        />
+                        {errors.confirm_password && <span className='text-red-500'>Confirm password is required</span>}
 
-                    <div><a className="link link-hover">Forgot password?</a></div>
-                    <button className="btn btn-neutral mt-4">Register</button>
-                </fieldset>
-                <p>Already have an account ? <Link className='text-blue-500' to={'/login'}>Login</Link> </p>
-            </form>
+                        <div><a className="link link-hover">Forgot password?</a></div>
+                        <button className="btn btn-neutral mt-4">Register</button>
+                    </fieldset>
+                    <p>Already have an account ? <Link className='text-blue-500' to={'/login'}>Login</Link> </p>
+                </form>
 
-        </div>
-    );
-};
+            </div>
+        );
+    };
 
-export default Register;
+    export default Register;

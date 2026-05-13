@@ -15,8 +15,8 @@ const AuthProvider = ({children}) => {
     const[loading, setLoading] = useState(true)
     const[roleLoading, setRoleLoading] = useState(true)
     const [role, setRole]= useState('')
-    const [userStatus, setUserStatus]=  useState('')
-
+    // null = not loaded yet; 'active' | 'blocked' from DB; 'missing' = no DB row; 'error' = fetch failed
+    const [userStatus, setUserStatus] = useState(null);
     const registerUser= (email, password)=>{
         setLoading(true)
         return createUserWithEmailAndPassword(auth, email, password)
@@ -58,16 +58,36 @@ const AuthProvider = ({children}) => {
     }, [])
 
 
-       useEffect(() => {
-        if(!user) return;
-        axios.get(`http://localhost:5000/users/role/${user.email}`)
-        .then(res => {
-            setRole( res.data.role)
-            setUserStatus(res.data.status)
-            setRoleLoading(false)
-            //setLoading(false)
-        })
-    }, [user])
+    useEffect(() => {
+        if (!user) {
+            setRole('');
+            setUserStatus(null);
+            setRoleLoading(false);
+            return;
+        }
+
+        setRoleLoading(true);
+        const safeEmail = encodeURIComponent(user.email || '');
+        axios
+            .get(`https://blood-donation-server-livid.vercel.app/users/role/${safeEmail}`)
+            .then((res) => {
+                const doc = res.data;
+                if (!doc) {
+                    setRole('');
+                    setUserStatus('missing');
+                    return;
+                }
+                setRole(doc.role ?? '');
+                setUserStatus(doc.status ?? 'active');
+            })
+            .catch(() => {
+                setRole('');
+                setUserStatus('error');
+            })
+            .finally(() => {
+                setRoleLoading(false);
+            });
+    }, [user]);
 
    // console.log(role);
     

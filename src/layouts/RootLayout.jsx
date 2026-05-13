@@ -6,12 +6,12 @@ import Footer from '../Pages/Footer/Footer';
 
 const RootLayout = () => {
     return (
-        <div className=''>
-        <div className='max-w-6xl mx-auto'>
-            <Navbar></Navbar>
-            <Outlet></Outlet>
-            <Footer></Footer>
-        </div>
+        <div className="min-h-screen">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <Navbar />
+                <Outlet />
+                <Footer />
+            </div>
         </div>
     );
 };

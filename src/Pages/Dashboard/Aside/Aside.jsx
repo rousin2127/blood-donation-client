@@ -1,28 +1,33 @@
 import { NavLink } from "react-router";
 import { Home, PlusCircle, ClipboardList } from "lucide-react";
 import useAuth from "../../../hook/useAuth";
+import { RxPerson } from "react-icons/rx";
 
 const Aside = () => {
 
   const { role } = useAuth()
 
   return (
-    <aside className="h-screen w-64 bg-gray-900 text-gray-100 flex flex-col">
+    <aside className="h-screen w-64 shrink-0 bg-neutral text-neutral-content flex flex-col rounded-xl border border-base-300 shadow-sm">
 
       {/* Logo */}
-      <div className="h-16 flex items-center justify-center text-xl font-bold border-b border-gray-800">
+      <div className="h-16 flex items-center justify-center text-xl font-bold border-b border-white/10 text-primary-content">
         Blood Donation
       </div>
 
-
       {
         role == 'admin' && (
-          <h1 className="text-center font-bold text-lg">Admin</h1>
+          <h1 className="text-center font-bold text-lg pt-2 text-primary-content/90">Admin</h1>
         )
       }
       {
-        role == 'dooner' && (
-          <h1 className="text-center font-bold text-lg">Dooner</h1>
+        role == 'donor' && (
+          <h1 className="text-center font-bold text-lg pt-2 text-primary-content/90">Donor</h1>
+        )
+      }
+      {
+        role == 'volunteer' && (
+          <h1 className="text-center font-bold text-lg pt-2 text-primary-content/90">Volunteer</h1>
         )
       }
 
@@ -30,6 +35,7 @@ const Aside = () => {
       {/* Menu */}
       <nav className="flex-1 px-4 py-6 space-y-2">
         <MenuItem to="/dashboard" icon={<Home size={20} />} label="Dashboard" />
+        <MenuItem to="/dashboard/profile" icon={<RxPerson size={20}/>} label="Profile" />
 
         {
           role == 'donor' && (
@@ -57,6 +63,13 @@ const Aside = () => {
           icon={<ClipboardList size={20} />}
           label="My Donation Request"
         />
+
+        {
+          role == 'admin' && (
+            <MenuItem to="/dashboard/add-volunteer" icon={<RxPerson size={20}/>} label="Add Volunteer" />
+          )
+
+        }
         <MenuItem to="/" icon={<Home size={20} />} label="Home" />
       </nav>
     </aside>
@@ -70,8 +83,8 @@ const MenuItem = ({ to, icon, label }) => (
     className={({ isActive }) =>
       `flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition
       ${isActive
-        ? "bg-blue-600 text-white"
-        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+        ? "bg-primary text-primary-content shadow-md"
+        : "text-neutral-content/80 hover:bg-white/10 hover:text-primary-content"
       }`
     }
   >

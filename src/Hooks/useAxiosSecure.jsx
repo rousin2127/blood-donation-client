@@ -6,7 +6,7 @@ import useAuth from "../hook/useAuth";
 
 
 const axiosSecure = axios.create({
-    baseURL:'http://localhost:5000'
+    baseURL:'https://blood-donation-server-livid.vercel.app'
 })
 
 const useAxiosSecure = ()=>{
@@ -14,9 +14,13 @@ const useAxiosSecure = ()=>{
     const {user}= useAuth()
     
     useEffect(() => {
-        const reqInterceptor = axiosSecure.interceptors.request.use( config =>{
-            config.headers.Authorization = `Bearer ${user?.accessToken}`
-            return config
+        const reqInterceptor = axiosSecure.interceptors.request.use(async (config) => {
+            // Firebase v9+ User — use ID token (accessToken on user is often undefined after reload)
+            if (user) {
+                const token = await user.getIdToken();
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
         })
 
         const resInterceptor = axiosSecure.interceptors.response.use((response)=>{
