@@ -25,11 +25,11 @@ const MainDashboard = () => {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Welcome, <span className="text-blue-600">{user?.displayName}</span> 👋
+        <h2 className="text-2xl font-bold text-gray-900">
+          Welcome, <span className="text-red-500">{user?.displayName}</span>
         </h2>
         <p className="text-gray-500 mt-1">
-          Here is a quick overview of your recent donation requests.
+          Check out this snapshot of your latest blood donation inquiries.
         </p>
       </div>
 

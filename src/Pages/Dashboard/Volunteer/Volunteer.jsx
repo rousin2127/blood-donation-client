@@ -64,7 +64,7 @@ const VolunteerRegister = () => {
         createAt: new Date(),
       };
 
-      await axios.post("https://blood-donation-server-livid.vercel.app/users", volunteerInfo);
+      await axios.post("http://localhost:5000/users", volunteerInfo);
 
       navigate("/login");
     } catch (error) {

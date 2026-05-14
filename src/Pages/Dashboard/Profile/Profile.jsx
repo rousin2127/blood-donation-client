@@ -96,35 +96,24 @@ const Profile = () => {
     try {
 
       const res = await axiosSecure.patch("/profile", form);
-
       if (res.data?.modifiedCount > 0) {
-
         const refreshed = await axiosSecure.get("/profile");
-
         setUser(refreshed.data);
       }
 
       setEditing(false);
-
       alert("Profile updated.");
-
     } catch (e) {
-
       console.error(e);
-
       alert("Failed to update profile.");
-
     } finally {
-
       setSaving(false);
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-xl shadow p-6">
-
       <div className="flex items-center justify-between gap-4 mb-6">
-
         <h2 className="text-2xl font-semibold text-gray-800">
           My Profile
         </h2>
@@ -188,7 +177,6 @@ const Profile = () => {
 
           {/* Name */}
           <div>
-
             <p className="text-sm text-gray-500">
               Name
             </p>
@@ -199,7 +187,7 @@ const Profile = () => {
               </p>
             ) : (
               <input
-                className="input input-bordered w-full"
+                className="input input-md mt-1 w-full"
                 value={form.displayName}
                 onChange={(e) =>
                   setForm((p) => ({
@@ -214,15 +202,12 @@ const Profile = () => {
 
           {/* Email */}
           <div>
-
             <p className="text-sm text-gray-500">
               Email
             </p>
-
             <p className="font-medium text-gray-800">
               {user?.email}
             </p>
-
           </div>
 
           {/* District + Upazila + Blood */}

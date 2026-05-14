@@ -69,7 +69,7 @@ const AuthProvider = ({children}) => {
         setRoleLoading(true);
         const safeEmail = encodeURIComponent(user.email || '');
         axios
-            .get(`https://blood-donation-server-livid.vercel.app/users/role/${safeEmail}`)
+            .get(`http://localhost:5000/users/role/${safeEmail}`)
             .then((res) => {
                 const doc = res.data;
                 if (!doc) {

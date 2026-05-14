@@ -7,9 +7,7 @@ const Footer = () => {
             <div className="py-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="space-y-3">
-                        <Link to="/" className="text-lg font-bold text-gray-900">
-                            Blood Donation
-                        </Link>
+                        <Link to={'/'} className=" text-xl"><span className='text-red-500 font-bold'>Blood</span> <span className='text-gray-900 font-bold'>Donation</span> </Link>
                         <p className="text-sm text-gray-600">
                             Connect donors with recipients, manage requests, and help save lives.
                         </p>
@@ -56,9 +54,9 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="mt-10 flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between text-xs text-gray-500">
-                    <p>© {new Date().getFullYear()} Blood Donation. All rights reserved.</p>
-                    <p>Made with MERN + Firebase Auth.</p>
+                <div className="mt-10 flex flex-col sm:flex-row gap-2 items-center sm:items-center justify-center text-xs text-gray-500">
+                    <p>© 2026 Blood Donation. All rights reserved.</p>
+                    
                 </div>
             </div>
         </footer>

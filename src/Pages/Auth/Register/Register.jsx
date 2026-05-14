@@ -75,7 +75,7 @@ const Register = () => {
                             district: data.district,
                             upazila: data.upazila,
                         }
-                        axios.post('https://blood-donation-server-livid.vercel.app/users', userInfo)
+                        axios.post('http://localhost:5000/users', userInfo)
                             .then(res => {
                                 console.log(res.data)
                             })
