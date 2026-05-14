@@ -14,6 +14,8 @@ import PrivateRout from "./PrivateRout";
 import MyDonationRequest from "../Pages/Dashboard/DonationRequest/MyDonationRequest";
 import Profile from "../Pages/Dashboard/Profile/Profile";
 import Volunteer from "../Pages/Dashboard/Volunteer/Volunteer";
+import Funding from "../Pages/Funding/Funding";
+import Error from "../Pages/Error/Error";
 
 export const router = createBrowserRouter([{
 
@@ -43,6 +45,14 @@ export const router = createBrowserRouter([{
         {
             path: 'donation-requests/:id',
             element: <PrivateRout><DonationRequestDetails /></PrivateRout>
+        },
+        {
+            path: 'funding',
+            element: <Funding></Funding>
+        },
+        {
+            path: 'error',
+            element: <Error></Error>
         }
     ]
 },

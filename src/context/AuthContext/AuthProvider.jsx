@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, reload, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase/firebase.init';
 import axios from 'axios';
 
@@ -17,6 +17,8 @@ const AuthProvider = ({children}) => {
     const [role, setRole]= useState('')
     // null = not loaded yet; 'active' | 'blocked' from DB; 'missing' = no DB row; 'error' = fetch failed
     const [userStatus, setUserStatus] = useState(null);
+    /** Bumps after reload(authUser) so UI re-reads displayName/photoURL (same object ref would skip React update). */
+    const [authRevision, setAuthRevision] = useState(0);
     const registerUser= (email, password)=>{
         setLoading(true)
         return createUserWithEmailAndPassword(auth, email, password)
@@ -43,6 +45,19 @@ const AuthProvider = ({children}) => {
     const updateUserProfile = (profile)=>{
 
         return updateProfile(auth.currentUser, profile)
+    }
+
+    /** Call after saving profile so Navbar / dashboard read fresh displayName & photoURL from Firebase. */
+    const refreshAuthUser = async () => {
+        const u = auth.currentUser;
+        if (!u) return;
+        try {
+            await reload(u);
+            setAuthRevision((r) => r + 1);
+            setUser(u);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
 
@@ -100,6 +115,8 @@ const AuthProvider = ({children}) => {
         signInGoogle,
         logOut,
         updateUserProfile,
+        refreshAuthUser,
+        authRevision,
         role,
         roleLoading,
         userStatus

@@ -4,7 +4,7 @@ import useAuth from '../../hook/useAuth';
 
 const Navbar = () => {
 
-    const { user, logOut } = useAuth();
+    const { user, logOut, authRevision } = useAuth();
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -70,6 +70,7 @@ const Navbar = () => {
                             <div className="w-10 rounded-full">
                                 <img
                                     alt="User"
+                                    key={`${user?.photoURL || ""}-${authRevision}`}
                                     src={user?.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
                                 />
                             </div>
@@ -78,7 +79,7 @@ const Navbar = () => {
                             tabIndex={0}
                             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
                         >
-                            <li className="px-2 py-1 text-sm text-gray-600">
+                            <li className="px-2 py-1 text-sm text-gray-600" key={authRevision}>
                                 {user?.displayName || "User"}
                             </li>
                             <li>

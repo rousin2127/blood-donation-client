@@ -112,8 +112,8 @@ const Register = () => {
 
     }
     return (
-            <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-                <h3 className='text-3xl text-center'>Welcome To Blood Donation</h3>
+            <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl my-15">
+                <h3 className='text-2xl font-bold text-gray-900 mt-3 text-center'>Welcome to <span className='text-red-500 font-bold'>Blood</span> <span className='text-gray-900 font-bold'>Donation</span></h3>
                 <p className='text-center'>Please Register</p>
                 <form className='card-body' onSubmit={handleSubmit(handleRegistration)}>
                     <fieldset className="fieldset">

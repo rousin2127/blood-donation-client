@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import axios from "axios";
+import useAuth from "../../../hook/useAuth";
 
 const Profile = () => {
   const axiosSecure = useAxiosSecure();
+  const { updateUserProfile, refreshAuthUser } = useAuth();
 
   const [user, setUser] = useState(null);
 
@@ -95,11 +97,26 @@ const Profile = () => {
 
     try {
 
-      const res = await axiosSecure.patch("/profile", form);
-      if (res.data?.modifiedCount > 0) {
-        const refreshed = await axiosSecure.get("/profile");
-        setUser(refreshed.data);
+      await axiosSecure.patch("/profile", form);
+
+      const refreshed = await axiosSecure.get("/profile");
+      setUser(refreshed.data);
+
+      try {
+        await updateUserProfile({
+          displayName: (form.displayName || "").trim(),
+          ...(form.photoURL?.trim()
+            ? { photoURL: form.photoURL.trim() }
+            : {}),
+        });
+      } catch (fbErr) {
+        console.error(fbErr);
+        alert(
+          "Profile saved on server, but updating your login name/photo failed. Try again or re-login."
+        );
       }
+
+      await refreshAuthUser();
 
       setEditing(false);
       alert("Profile updated.");

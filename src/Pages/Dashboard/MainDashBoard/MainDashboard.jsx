@@ -4,7 +4,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../hook/useAuth";
 
 const MainDashboard = () => {
-  const { user } = useAuth();
+  const { user, authRevision } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [recentRequests, setRecentRequests] = useState([]);
 
@@ -25,8 +25,8 @@ const MainDashboard = () => {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Welcome, <span className="text-red-500">{user?.displayName}</span>
+        <h2 className="text-2xl font-bold text-gray-900" key={authRevision}>
+          Welcome, <span className="text-red-500">{user?.displayName || user?.name}</span>
         </h2>
         <p className="text-gray-500 mt-1">
           Check out this snapshot of your latest blood donation inquiries.
