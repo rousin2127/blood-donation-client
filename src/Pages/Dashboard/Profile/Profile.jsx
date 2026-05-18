@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import axios from "axios";
 import useAuth from "../../../hook/useAuth";
+import { toastError, toastSuccess, toastWarning } from "../../../utils/toast";
 
 const Profile = () => {
   const axiosSecure = useAxiosSecure();
@@ -111,7 +112,7 @@ const Profile = () => {
         });
       } catch (fbErr) {
         console.error(fbErr);
-        alert(
+        toastWarning(
           "Profile saved on server, but updating your login name/photo failed. Try again or re-login."
         );
       }
@@ -119,19 +120,19 @@ const Profile = () => {
       await refreshAuthUser();
 
       setEditing(false);
-      alert("Profile updated.");
+      toastSuccess("Profile updated.");
     } catch (e) {
       console.error(e);
-      alert("Failed to update profile.");
+      toastError("Failed to update profile.");
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-xl shadow p-6">
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">
+    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow p-4 sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
           My Profile
         </h2>
 

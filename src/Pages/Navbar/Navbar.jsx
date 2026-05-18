@@ -23,9 +23,9 @@ const Navbar = () => {
             <li>
                 <NavLink to="/search">Search Donors</NavLink>
             </li>
-            {user && (
+                    {user && (
                 <li>
-                    <NavLink to="/funding">Funding</NavLink>
+                    <NavLink to="/dashboard/funding">Funding</NavLink>
                 </li>
             )}
         </>
@@ -48,7 +48,7 @@ const Navbar = () => {
                         }
                     </ul>
                 </div>
-                <Link to={'/'} className="btn btn-ghost text-xl"><span className='text-red-500 font-bold'>Blood</span> <span className='text-gray-900 font-bold'>Donation</span> </Link>
+                <Link to={'/'} className="btn btn-ghost text-xl"><span className='text-red-500 font-bold'>Life</span> <span className='text-gray-900 font-bold'>Stream</span> </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">

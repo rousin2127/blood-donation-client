@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../../hook/useAuth";
 import axios from "axios";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { toastApiError, toastSuccess } from "../../../utils/toast";
 
 const AddRequest = () => {
   const { user } = useAuth();
@@ -47,18 +48,19 @@ const AddRequest = () => {
     console.log(requestData);
 
     axiosSecure.post("/requests", requestData)
-      .then((res) => {
-        alert(res.data.insertedId);
+      .then(() => {
+        toastSuccess("Donation request created successfully.");
       })
       .catch((error) => {
         console.log(error);
+        toastApiError(error, "Failed to create request");
       });
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-xl shadow p-6">
+    <div className="w-full max-w-3xl mx-auto bg-white rounded-xl shadow p-4 sm:p-6">
 
-      <h2 className="text-2xl font-semibold mb-6">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
         Create Donation Request
       </h2>
 

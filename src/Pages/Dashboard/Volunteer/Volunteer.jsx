@@ -73,8 +73,8 @@ const VolunteerRegister = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm shadow-2xl">
-      <h3 className="text-3xl text-center mt-4">Volunteer Registration</h3>
+    <div className="card bg-base-100 w-full mx-auto max-w-md shadow-2xl">
+      <h3 className="text-2xl sm:text-3xl text-center mt-4 px-4">Volunteer Registration</h3>
       <p className="text-center">Register as a Volunteer</p>
 
       <form className="card-body" onSubmit={handleSubmit(handleVolunteerRegister)}>

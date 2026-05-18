@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../hook/useAuth";
+import { toastApiError, toastError, toastSuccess, toastWarning } from "../../../utils/toast";
 
 const sameId = (a, b) => String(a) === String(b);
 
@@ -20,7 +21,7 @@ const AllUsers = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("Failed to load users.");
+        toastError("Failed to load users.");
       })
       .finally(() => setLoading(false));
   };
@@ -45,13 +46,13 @@ const AllUsers = () => {
         setUsers((prev) =>
           prev.map((u) => (sameId(u._id, id) ? { ...u, role: "admin" } : u))
         );
-        alert(`${userEmail} is now admin.`);
+        toastSuccess(`${userEmail} is now admin.`);
       } else {
-        alert("No changes applied.");
+        toastWarning("No changes applied.");
       }
     } catch (e) {
       console.error(e);
-      alert("Failed to make admin.");
+      toastApiError(e, "Failed to make admin.");
     }
   };
 
@@ -66,19 +67,19 @@ const AllUsers = () => {
             sameId(u._id, id) ? { ...u, role: "volunteer" } : u
           )
         );
-        alert(`${userEmail} is now volunteer.`);
+        toastSuccess(`${userEmail} is now volunteer.`);
       } else {
-        alert("No changes applied.");
+        toastWarning("No changes applied.");
       }
     } catch (e) {
       console.error(e);
-      alert("Failed to make volunteer.");
+      toastApiError(e, "Failed to make volunteer.");
     }
   };
 
   const handleBlockUser = async (id, userEmail) => {
     if (currentUser?.email && userEmail === currentUser.email) {
-      alert("You cannot block yourself.");
+      toastWarning("You cannot block yourself.");
       return;
     }
     const confirmBlock = window.confirm(
@@ -93,13 +94,13 @@ const AllUsers = () => {
             sameId(u._id, id) ? { ...u, status: "blocked" } : u
           )
         );
-        alert(`User ${userEmail} has been blocked successfully.`);
+        toastSuccess(`User ${userEmail} has been blocked.`);
       } else {
-        alert("Failed to block user. Please try again.");
+        toastError("Failed to block user. Please try again.");
       }
     } catch (error) {
       console.error("Error blocking user:", error);
-      alert("Error blocking user. Please try again.");
+      toastApiError(error, "Error blocking user. Please try again.");
     }
   };
 
@@ -116,13 +117,13 @@ const AllUsers = () => {
             sameId(u._id, id) ? { ...u, status: "active" } : u
           )
         );
-        alert(`User ${userEmail} has been unblocked successfully.`);
+        toastSuccess(`User ${userEmail} has been unblocked.`);
       } else {
-        alert("Failed to unblock user. Please try again.");
+        toastError("Failed to unblock user. Please try again.");
       }
     } catch (error) {
       console.error("Error unblocking user:", error);
-      alert("Error unblocking user. Please try again.");
+      toastApiError(error, "Error unblocking user. Please try again.");
     }
   };
 
@@ -141,9 +142,9 @@ const AllUsers = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">
+    <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
           All Users ({filteredUsers.length})
         </h2>
         <div className="flex items-center gap-2">
@@ -160,8 +161,8 @@ const AllUsers = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="table w-full">
+      <div className="overflow-x-auto -mx-1 sm:mx-0">
+        <table className="table table-sm sm:table-md w-full min-w-[600px]">
           <thead className="bg-gray-100 text-gray-700">
             <tr>
               <th>#</th>

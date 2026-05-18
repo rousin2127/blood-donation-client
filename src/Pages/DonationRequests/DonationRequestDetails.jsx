@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useAuth from "../../hook/useAuth";
+import { toastApiError, toastSuccess } from "../../utils/toast";
 
 const DonationRequestDetails = () => {
   const { id } = useParams();
@@ -33,10 +34,10 @@ const DonationRequestDetails = () => {
         setRequest(refreshed.data);
       }
       document.getElementById("donate_modal")?.close?.();
-      alert("Donation confirmed. Status updated to inprogress.");
+      toastSuccess("Donation confirmed. Status updated to in progress.");
     } catch (err) {
       console.error(err);
-      alert("Failed to donate.");
+      toastApiError(err, "Failed to donate.");
     } finally {
       setDonating(false);
     }
@@ -88,6 +89,12 @@ const DonationRequestDetails = () => {
           <Info label="Donation time" value={request.donationTime} />
           <Info label="Requester email" value={request.requesterEmail} />
           <Info label="Message" value={request.message} />
+          {request.status === "inprogress" && (
+            <>
+              <Info label="Donor name" value={request.donorName} />
+              <Info label="Donor email" value={request.donorEmail} />
+            </>
+          )}
         </div>
 
         <div className="mt-6 flex items-center justify-end">

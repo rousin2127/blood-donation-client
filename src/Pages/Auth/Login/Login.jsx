@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hook/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { toastSuccess } from '../../../utils/toast';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -18,6 +19,7 @@ const Login = () => {
     setAuthError(''); // Clear any previous errors
     signInUser(data.email, data.password)
       .then(() => {
+        toastSuccess('Logged in successfully.');
         navigate(from, { replace: true });
       })
       .catch(error => {

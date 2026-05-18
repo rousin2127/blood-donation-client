@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="py-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div className="space-y-3">
-                        <Link to={'/'} className=" text-xl"><span className='text-red-500 font-bold'>Blood</span> <span className='text-gray-900 font-bold'>Donation</span> </Link>
+                        <Link to={'/'} className=" text-xl"><span className='text-red-500 font-bold'>Life</span> <span className='text-gray-900 font-bold'>Stream</span> </Link>
                         <p className="text-sm text-gray-600">
                             Connect donors with recipients, manage requests, and help save lives.
                         </p>
@@ -19,6 +19,7 @@ const Footer = () => {
                             <li><Link className="hover:text-gray-900" to="/donation-requests">Donation Requests</Link></li>
                             <li><Link className="hover:text-gray-900" to="/search">Search Donors</Link></li>
                             <li><Link className="hover:text-gray-900" to="/dashboard">Dashboard</Link></li>
+                            <li><Link className="hover:text-gray-900" to="/dashboard/funding">Funding</Link></li>
                         </ul>
                     </div>
 

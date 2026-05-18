@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../../hook/useAuth';
 import { Link, useNavigate } from 'react-router';
 import axios from 'axios'
+import { toastError, toastSuccess } from '../../../utils/toast';
 
 
 const Register = () => {
@@ -40,12 +41,12 @@ const Register = () => {
     const handleRegistration = (data) => {
         const email = (data?.email || '').trim();
         if (!email) {
-            alert('Please enter a valid email.');
+            toastError('Please enter a valid email.');
             return;
         }
 
         if (data?.password !== data?.confirm_password) {
-            alert('Password and Confirm Password must match.');
+            toastError('Password and Confirm Password must match.');
             return;
         }
 
@@ -80,7 +81,7 @@ const Register = () => {
                                 console.log(res.data)
                             })
                             .catch(error => {
-                                alert('please try again')
+                                toastError('Could not save user. Please try again.');
                             })
 
                         const userProfile = {
@@ -90,11 +91,11 @@ const Register = () => {
                         updateUserProfile(userProfile)
                             .then(() => {
                                 console.log('user profile updated ')
-                                alert("Register successfully! please Login")
+                                toastSuccess("Registered successfully! Please log in.");
                                 navigate('/login');
                             })
                             .catch(error => {
-                                alert('please try again')
+                                toastError('Could not update profile. Please try again.');
                             })
                     })
 
@@ -102,11 +103,11 @@ const Register = () => {
             })
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
-                    alert('This email already exists. Please login.');
+                    toastError('This email already exists. Please log in.');
                 } else if (error.code === 'auth/invalid-email') {
-                    alert('Invalid email. Please check and try again.');
+                    toastError('Invalid email. Please check and try again.');
                 } else {
-                    alert(error.message);
+                    toastError(error.message || 'Registration failed.');
                 }
             })
 

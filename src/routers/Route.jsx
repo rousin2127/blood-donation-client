@@ -9,18 +9,23 @@ import DonationRequestDetails from "../Pages/DonationRequests/DonationRequestDet
 import DashBoardLayout from "../DashboardLayout/DashBoardLayout";
 import MainDashboard from "../Pages/Dashboard/MainDashBoard/MainDashboard";
 import AddRequest from "../Pages/Dashboard/AddRequest/AddRequest";
+import EditDonationRequest from "../Pages/Dashboard/AddRequest/EditDonationRequest";
 import AllUsers from "../Pages/Dashboard/Allsers/AllUsers";
 import PrivateRout from "./PrivateRout";
 import MyDonationRequest from "../Pages/Dashboard/DonationRequest/MyDonationRequest";
 import Profile from "../Pages/Dashboard/Profile/Profile";
 import Volunteer from "../Pages/Dashboard/Volunteer/Volunteer";
 import Funding from "../Pages/Funding/Funding";
-import Error from "../Pages/Error/Error";
+import AllBloodDonationRequests from "../Pages/Dashboard/AllBloodDonationRequests/AllBloodDonationRequests";
+import ErrorPage, { RouteErrorBoundary } from "../Pages/Error/Error";
+import HydrateFallback from "../Pages/Error/HydrateFallback";
 
 export const router = createBrowserRouter([{
 
     path: '/',
     Component: RootLayout,
+    HydrateFallback: HydrateFallback,
+    errorElement: <RouteErrorBoundary />,
     children: [
         {
             index: true,
@@ -47,17 +52,25 @@ export const router = createBrowserRouter([{
             element: <PrivateRout><DonationRequestDetails /></PrivateRout>
         },
         {
-            path: 'funding',
-            element: <Funding></Funding>
+            path: 'error',
+            element: <ErrorPage />
         },
         {
-            path: 'error',
-            element: <Error></Error>
+            path: '*',
+            element: (
+                <ErrorPage
+                    statusCode={404}
+                    title="Page not found"
+                    message="This URL is not part of BloodCare. Check the address or return home."
+                />
+            )
         }
     ]
 },
 {
     path:'dashboard',
+    HydrateFallback: HydrateFallback,
+    errorElement: <RouteErrorBoundary />,
     element: <PrivateRout><DashBoardLayout></DashBoardLayout></PrivateRout>,
     children: [
         {
@@ -73,12 +86,24 @@ export const router = createBrowserRouter([{
             element: <AddRequest></AddRequest>
         },
         {
+            path: 'edit-donation-request/:id',
+            element: <EditDonationRequest />
+        },
+        {
             path: 'all-users',
             element: <AllUsers></AllUsers>
         },
         {
             path: 'add-volunteer',
             element: <Volunteer></Volunteer>
+        },
+        {
+            path: 'funding',
+            element: <Funding />
+        },
+        {
+            path: 'all-blood-donation-request',
+            element: <AllBloodDonationRequests />
         },
         {
             path: '/dashboard/my-donation-requests',

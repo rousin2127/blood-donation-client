@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { toastSuccess } from '../../utils/toast';
 
 const Home = () => {
     return (
@@ -132,7 +133,7 @@ const Home = () => {
                         className="space-y-4"
                         onSubmit={(e) => {
                             e.preventDefault();
-                            alert("Thanks! We received your message.");
+                            toastSuccess("Thanks! We received your message.");
                             e.currentTarget.reset();
                         }}
                     >
