@@ -84,7 +84,7 @@ const AuthProvider = ({children}) => {
         setRoleLoading(true);
         const safeEmail = encodeURIComponent(user.email || '');
         axios
-            .get(`http://localhost:5000/users/role/${safeEmail}`)
+            .get(`https://blood-donation-server-tm6c.onrender.com/users/role/${safeEmail}`)
             .then((res) => {
                 const doc = res.data;
                 if (!doc) {

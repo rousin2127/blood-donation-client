@@ -76,7 +76,7 @@ const Register = () => {
                             district: data.district,
                             upazila: data.upazila,
                         }
-                        axios.post('http://localhost:5000/users', userInfo)
+                        axios.post('https://blood-donation-server-tm6c.onrender.com/users', userInfo)
                             .then(res => {
                                 console.log(res.data)
                             })

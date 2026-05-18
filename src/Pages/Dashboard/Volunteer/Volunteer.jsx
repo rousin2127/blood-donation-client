@@ -64,7 +64,7 @@ const VolunteerRegister = () => {
         createAt: new Date(),
       };
 
-      await axios.post("http://localhost:5000/users", volunteerInfo);
+      await axios.post("https://blood-donation-server-tm6c.onrender.com/users", volunteerInfo);
 
       navigate("/login");
     } catch (error) {

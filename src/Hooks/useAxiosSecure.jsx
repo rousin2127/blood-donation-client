@@ -6,7 +6,7 @@ import useAuth from "../hook/useAuth";
 
 
 const axiosSecure = axios.create({
-    baseURL:'http://localhost:5000'
+    baseURL:'https://blood-donation-server-tm6c.onrender.com'
 })
 
 const useAxiosSecure = ()=>{
