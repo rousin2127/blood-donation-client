@@ -25,7 +25,7 @@ const Aside = ({ mobileOpen = false, onClose }) => {
   const navContent = (
   <>
       <div className="h-14 sm:h-16 flex items-center justify-between lg:justify-center gap-2 px-4 lg:px-3 border-b border-white/10 text-lg sm:text-xl font-bold text-primary-content shrink-0">
-        <span className="truncate lg:text-center">Blood Donation</span>
+        <span className='text-red-500 font-bold'>Life</span> <span className='text-gray-900 font-bold'>Stream</span>
         <button
           type="button"
           className="btn btn-ghost btn-sm btn-square shrink-0 lg:hidden text-primary-content"
