@@ -89,22 +89,24 @@ const Login = () => {
           error={errors.password?.message}
         />
 
-        <Button type="submit" className="w-full" loading={loading}>
-          Login
-        </Button>
+        <div className=" flex flex-col gap-3 mt-6">
+          <Button type="submit" className="w-full" loading={loading}>
+            Login
+          </Button>
 
-        <Button type="button" variant="outline" className="w-full" onClick={handleGoogle} disabled={loading}>
-          Continue with Google
-        </Button>
+          <Button type="button" variant="outline" className="w-full" onClick={handleGoogle} disabled={loading}>
+            Continue with Google
+          </Button>
 
-        <Button type="button" variant="ghost" className="w-full text-sm" onClick={fillDemo}>
-          Use demo account
-        </Button>
+          <Button type="button" variant="ghost" className="w-full text-sm" onClick={fillDemo}>
+            Use demo account
+          </Button>
 
-        <p className="text-center text-sm text-base-content/70">
-          No account?{" "}
-          <Link to="/register" className="link link-primary font-medium">Register</Link>
-        </p>
+          <p className="text-center text-sm text-base-content/70">
+            No account?{" "}
+            <Link to="/register" className="link link-primary font-medium">Register</Link>
+          </p>
+        </div>
       </form>
     </Card>
   );

@@ -93,7 +93,7 @@ const Home = () => {
         >
           {heroSlides.map((s) => (
             <SwiperSlide key={s.title}>
-              <div className="h-full min-h-[55vh] max-h-[70vh] bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/80 flex items-center">
+              <div className="h-full min-h-[55vh] max-h-[70vh] bg-red-950 flex items-center">
                 <div className="px-6 sm:px-12 py-12 max-w-2xl text-primary-content">
                   <h1 className="text-primary-content text-3xl sm:text-5xl leading-tight">{s.title}</h1>
                   <p className="mt-4 text-lg text-primary-content/90">{s.subtitle}</p>
