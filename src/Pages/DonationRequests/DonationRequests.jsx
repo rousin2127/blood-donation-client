@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import useAxios from "../../Hooks/useAxios";
+import DonationRequestCard from "../../components/ui/DonationRequestCard";
+import { CardSkeleton } from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
 
 const DonationRequests = () => {
   const axiosPublic = useAxios();
@@ -10,65 +13,42 @@ const DonationRequests = () => {
   useEffect(() => {
     setLoading(true);
     axiosPublic
-      .get("/donation-requests")
-      .then((res) => setRequests(res.data || []))
-      .catch((err) => {
-        console.error(err);
-        setRequests([]);
-      })
+      .get("/explore/donation-requests?status=pending&size=12&page=0")
+      .then((res) => setRequests(res.data.items || []))
+      .catch(() => setRequests([]))
       .finally(() => setLoading(false));
   }, [axiosPublic]);
 
   return (
-    <div className="py-8 space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Donation Requests</h1>
-        <p className="text-gray-600">Only pending requests are shown here.</p>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1>Donation requests</h1>
+          <p className="text-base-content/70 mt-1">Pending requests from our live database.</p>
+        </div>
+        <Link to="/explore">
+          <Button variant="outline" size="sm">Advanced explore</Button>
+        </Link>
       </div>
 
       {loading && (
-        <div className="flex justify-center items-center min-h-[180px]">
-          <span className="loading loading-spinner loading-lg" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <CardSkeleton key={i} />
+          ))}
         </div>
       )}
 
       {!loading && requests.length === 0 && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-gray-600">
+        <div className="rounded-xl border border-base-300 bg-base-100 p-8 text-center text-base-content/70">
           No pending donation requests found.
         </div>
       )}
 
       {!loading && requests.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {requests.map((r) => (
-            <div key={r._id} className="rounded-2xl border border-gray-200 bg-white p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{r.recipientName}</h3>
-                  <p className="text-sm text-gray-600">
-                    {r.district}, {r.upazila}
-                  </p>
-                </div>
-                <span className="badge badge-outline border-red-300 text-red-600">{r.bloodGroup}</span>
-              </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-gray-700">
-                <div>
-                  <p className="text-gray-500">Date</p>
-                  <p className="font-medium">{r.donationDate}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Time</p>
-                  <p className="font-medium">{r.donationTime}</p>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <Link to={`/donation-requests/${r._id}`} className="btn btn-sm btn-error text-white">
-                  View
-                </Link>
-              </div>
-            </div>
+            <DonationRequestCard key={r._id} request={r} />
           ))}
         </div>
       )}

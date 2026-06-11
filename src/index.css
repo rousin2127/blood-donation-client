@@ -35,6 +35,35 @@
   --noise: 0;
 }
 
+[data-theme="bloodcare-dark"] {
+  color-scheme: dark;
+  --color-base-100: oklch(22% 0.02 18);
+  --color-base-200: oklch(18% 0.02 18);
+  --color-base-300: oklch(28% 0.025 18);
+  --color-base-content: oklch(95% 0.01 15);
+  --color-primary: oklch(62% 0.19 22);
+  --color-primary-content: oklch(99% 0.01 15);
+  --color-secondary: oklch(55% 0.1 18);
+  --color-secondary-content: oklch(98% 0.01 15);
+  --color-accent: oklch(65% 0.12 245);
+  --color-accent-content: oklch(99% 0.01 245);
+  --color-neutral: oklch(16% 0.02 18);
+  --color-neutral-content: oklch(92% 0.01 15);
+  --color-info: oklch(68% 0.12 240);
+  --color-info-content: oklch(99% 0.01 240);
+  --color-success: oklch(65% 0.14 155);
+  --color-success-content: oklch(99% 0.02 155);
+  --color-warning: oklch(78% 0.15 75);
+  --color-warning-content: oklch(20% 0.06 45);
+  --color-error: oklch(62% 0.2 25);
+  --color-error-content: oklch(99% 0.01 15);
+}
+
 body {
   @apply bg-base-200 text-base-content antialiased;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+h1 { @apply text-3xl sm:text-4xl font-bold tracking-tight; }
+h2 { @apply text-2xl sm:text-3xl font-bold tracking-tight; }
+h3 { @apply text-xl font-semibold; }

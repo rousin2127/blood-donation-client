@@ -3,6 +3,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import axios from "axios";
 import useAuth from "../../../hook/useAuth";
 import { toastError, toastSuccess, toastWarning } from "../../../utils/toast";
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
+import { auth } from "../../../firebase/firebase.init";
 
 const Profile = () => {
   const axiosSecure = useAxiosSecure();
@@ -13,6 +15,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [pwdForm, setPwdForm] = useState({ current: "", next: "", confirm: "" });
+  const [pwdSaving, setPwdSaving] = useState(false);
 
   // district + upazila
   const [districts, setDistricts] = useState([]);
@@ -126,6 +130,36 @@ const Profile = () => {
       toastError("Failed to update profile.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const onPasswordChange = async (e) => {
+    e.preventDefault();
+    if (pwdForm.next.length < 6) {
+      toastError("New password must be at least 6 characters.");
+      return;
+    }
+    if (pwdForm.next !== pwdForm.confirm) {
+      toastError("New passwords do not match.");
+      return;
+    }
+    const u = auth.currentUser;
+    if (!u?.email) {
+      toastError("Password change is only available for email/password accounts.");
+      return;
+    }
+    setPwdSaving(true);
+    try {
+      const cred = EmailAuthProvider.credential(u.email, pwdForm.current);
+      await reauthenticateWithCredential(u, cred);
+      await updatePassword(u, pwdForm.next);
+      setPwdForm({ current: "", next: "", confirm: "" });
+      toastSuccess("Password updated successfully.");
+    } catch (err) {
+      console.error(err);
+      toastError(err.code === "auth/wrong-password" ? "Current password is incorrect." : "Failed to update password.");
+    } finally {
+      setPwdSaving(false);
     }
   };
 
@@ -378,6 +412,51 @@ const Profile = () => {
 
         </div>
 
+      </div>
+
+      <div className="mt-8 pt-8 border-t border-base-300">
+        <h3 className="text-lg font-semibold mb-4">Change password</h3>
+        <form onSubmit={onPasswordChange} className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl">
+          <label className="form-control">
+            <span className="label-text">Current password</span>
+            <input
+              type="password"
+              className="input input-bordered rounded-xl"
+              value={pwdForm.current}
+              onChange={(e) => setPwdForm((p) => ({ ...p, current: e.target.value }))}
+              required
+            />
+          </label>
+          <label className="form-control">
+            <span className="label-text">New password</span>
+            <input
+              type="password"
+              className="input input-bordered rounded-xl"
+              value={pwdForm.next}
+              onChange={(e) => setPwdForm((p) => ({ ...p, next: e.target.value }))}
+              required
+              minLength={6}
+            />
+          </label>
+          <label className="form-control">
+            <span className="label-text">Confirm new password</span>
+            <input
+              type="password"
+              className="input input-bordered rounded-xl"
+              value={pwdForm.confirm}
+              onChange={(e) => setPwdForm((p) => ({ ...p, confirm: e.target.value }))}
+              required
+            />
+          </label>
+          <div className="sm:col-span-3">
+            <button type="submit" className="btn btn-primary rounded-xl" disabled={pwdSaving}>
+              {pwdSaving ? "Updating…" : "Update password"}
+            </button>
+          </div>
+        </form>
+        <p className="text-xs text-base-content/60 mt-2">
+          Google sign-in accounts must reset password through Google account settings.
+        </p>
       </div>
     </div>
   );

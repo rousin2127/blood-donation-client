@@ -1,67 +1,66 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router";
+import { Facebook, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
-    return (
-        <footer className="mt-16 border-t border-gray-200">
-            <div className="py-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div className="space-y-3">
-                        <Link to={'/'} className=" text-xl"><span className='text-red-500 font-bold'>Life</span> <span className='text-gray-900 font-bold'>Stream</span> </Link>
-                        <p className="text-sm text-gray-600">
-                            Connect donors with recipients, manage requests, and help save lives.
-                        </p>
-                    </div>
-
-                    <div className="space-y-2">
-                        <h4 className="font-semibold text-gray-900">Quick Links</h4>
-                        <ul className="space-y-2 text-sm text-gray-600">
-                            <li><Link className="hover:text-gray-900" to="/donation-requests">Donation Requests</Link></li>
-                            <li><Link className="hover:text-gray-900" to="/search">Search Donors</Link></li>
-                            <li><Link className="hover:text-gray-900" to="/dashboard">Dashboard</Link></li>
-                            <li><Link className="hover:text-gray-900" to="/dashboard/funding">Funding</Link></li>
-                        </ul>
-                    </div>
-
-                    <div className="space-y-2">
-                        <h4 className="font-semibold text-gray-900">Support</h4>
-                        <ul className="space-y-2 text-sm text-gray-600">
-                            <li><span className="text-gray-500">Phone:</span> +880 1XXXXXXXXX</li>
-                            <li><span className="text-gray-500">Email:</span> support@example.com</li>
-                        </ul>
-                    </div>
-
-                    <div className="space-y-3">
-                        <h4 className="font-semibold text-gray-900">Follow</h4>
-                        <div className="flex items-center gap-3">
-                            <a
-                                className="btn btn-ghost btn-sm"
-                                href="https://x.com/"
-                                target="_blank"
-                                rel="noreferrer"
-                                aria-label="X"
-                                title="X"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18.244 2H21.552L14.33 10.26L22.823 22H16.17L10.96 14.934L4.779 22H1.469L9.191 13.172L1.05 2H7.873L12.58 8.502L18.244 2ZM17.084 20.05H18.917L6.88 3.848H4.913L17.084 20.05Z" fill="currentColor" />
-                                </svg>
-                            </a>
-                            <a className="btn btn-ghost btn-sm" href="#" aria-label="Facebook" title="Facebook">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 9H16V6H14C11.791 6 10 7.791 10 10V12H8V15H10V22H13V15H15.358L16 12H13V10C13 9.448 13.448 9 14 9Z" fill="currentColor"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-10 flex flex-col sm:flex-row gap-2 items-center sm:items-center justify-center text-xs text-gray-500">
-                    <p>© 2026 Blood Donation. All rights reserved.</p>
-                    
-                </div>
-            </div>
-        </footer>
-    );
+  const year = new Date().getFullYear();
+  return (
+    <footer className="w-full border-t border-base-300 bg-neutral text-neutral-content mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="space-y-3">
+          <p className="text-xl font-bold">
+            <span className="text-primary">Blood</span>Care
+          </p>
+          <p className="text-sm text-neutral-content/80 leading-relaxed">
+            Connecting blood donors with patients across Bangladesh through verified requests,
+            location search, and coordinated volunteer support.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-3">Quick links</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/explore" className="hover:text-primary transition">Explore requests</Link></li>
+            <li><Link to="/search" className="hover:text-primary transition">Find donors</Link></li>
+            <li><Link to="/about" className="hover:text-primary transition">About us</Link></li>
+            <li><Link to="/contact" className="hover:text-primary transition">Contact</Link></li>
+            <li><Link to="/help" className="hover:text-primary transition">Help & support</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-3">Legal</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/privacy" className="hover:text-primary transition">Privacy policy</Link></li>
+            <li><Link to="/terms" className="hover:text-primary transition">Terms & conditions</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-3">Contact</h4>
+          <ul className="space-y-3 text-sm text-neutral-content/90">
+            <li className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>Dhaka, Bangladesh</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Phone className="w-4 h-4 shrink-0" />
+              <a href="tel:+8801712345678" className="hover:text-primary">+880 1712-345678</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail className="w-4 h-4 shrink-0" />
+              <a href="mailto:support@bloodcare.bd" className="hover:text-primary">support@bloodcare.bd</a>
+            </li>
+            <li className="flex gap-3 pt-2">
+              <a href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="btn btn-ghost btn-sm btn-circle">
+                <Facebook className="w-4 h-4" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-neutral-content/10 py-4 text-center text-xs text-neutral-content/70">
+        © {year} BloodCare. All rights reserved.
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

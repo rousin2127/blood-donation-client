@@ -8,6 +8,7 @@ import {
   DonationRequestStatusBadge,
   DonorInfoCell,
 } from "../DonationRequest/DonorRequestRow";
+import DashboardCharts from "./DashboardCharts";
 
 const MainDashboard = () => {
   const { user, authRevision, role } = useAuth();
@@ -83,6 +84,10 @@ const MainDashboard = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {(role === "admin" || role === "volunteer") && (
+        <DashboardCharts />
       )}
 
       <div className="bg-white p-4 sm:p-6 rounded-xl shadow">

@@ -3,6 +3,12 @@ import RootLayout from "../layouts/RootLayout";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import Explore from "../Pages/Explore/Explore";
+import About from "../Pages/About/About";
+import Contact from "../Pages/Contact/Contact";
+import Help from "../Pages/Help/Help";
+import Privacy from "../Pages/Legal/Privacy";
+import Terms from "../Pages/Legal/Terms";
 import Search from "../Pages/Search/Search";
 import DonationRequests from "../Pages/DonationRequests/DonationRequests";
 import DonationRequestDetails from "../Pages/DonationRequests/DonationRequestDetails";
@@ -40,6 +46,30 @@ export const router = createBrowserRouter([{
             Component: Register
         },
         {
+            path: 'explore',
+            Component: Explore
+        },
+        {
+            path: 'about',
+            Component: About
+        },
+        {
+            path: 'contact',
+            Component: Contact
+        },
+        {
+            path: 'help',
+            Component: Help
+        },
+        {
+            path: 'privacy',
+            Component: Privacy
+        },
+        {
+            path: 'terms',
+            Component: Terms
+        },
+        {
             path: 'search',
             Component: Search
         },
@@ -49,7 +79,7 @@ export const router = createBrowserRouter([{
         },
         {
             path: 'donation-requests/:id',
-            element: <PrivateRout><DonationRequestDetails /></PrivateRout>
+            Component: DonationRequestDetails
         },
         {
             path: 'error',
